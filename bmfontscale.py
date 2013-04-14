@@ -9,7 +9,7 @@ def error(msg):
 	print "Error: %s" % msg
 	exit(1)
 
-def process(line, scale):
+def process(line, scale, out_file):
 	# process each section
 	elems = string.split(line)
 	section = elems[0]
@@ -31,6 +31,18 @@ def process(line, scale):
 			splitted_pair = string.split(pair, "=")
 			if splitted_pair[0] == "lineHeight" or splitted_pair[0] == "base"  or splitted_pair[0] == "scaleW" or splitted_pair[0] == "scaleH":
 				splitted_pair[1] = str( int(splitted_pair[1])*scale )
+
+			if len(splitted_pair) == 2:
+				new_pair = splitted_pair[0] + "=" + splitted_pair[1]
+			else:
+				new_pair = pair
+			new_pairs.append(new_pair)
+	elif section == "page":
+		for pair in elems:
+			splitted_pair = string.split(pair, "=")
+			if splitted_pair[0] == "file":
+				# we assume that .png file is the same as the output one
+				splitted_pair[1] = '"' + out_file[:-4] + ".png" + '"'
 
 			if len(splitted_pair) == 2:
 				new_pair = splitted_pair[0] + "=" + splitted_pair[1]
@@ -76,7 +88,7 @@ try:
 		if elems[0] != "info":
 			error("Probably not a BMFont file!")
 		for l in lines:
-			out_line = process(l, scale) + "\n"
+			out_line = process(l, scale, output_file) + "\n"
 			out_lines.append(out_line)
 
 	# writing new one
