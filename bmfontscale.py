@@ -18,7 +18,7 @@ def process(line, scale, out_file):
 	if section == "info":
 		for pair in elems:
 			splitted_pair = string.split(pair, "=")
-			if splitted_pair[0] == "size":
+			if splitted_pair[0] == "size" or splitted_pair[0] == "stretchH":
 				splitted_pair[1] = str( int(splitted_pair[1])*scale )
 
 			if len(splitted_pair) == 2:
@@ -52,7 +52,7 @@ def process(line, scale, out_file):
 	elif section == "char":
 		for pair in elems:
 			splitted_pair = string.split(pair, "=")
-			if splitted_pair[0] == "x" or splitted_pair[0] == "y"  or splitted_pair[0] == "width" or splitted_pair[0] == "height":
+			if splitted_pair[0] == "x" or splitted_pair[0] == "y"  or splitted_pair[0] == "width" or splitted_pair[0] == "height" or splitted_pair[0] == "xadvance":
 				splitted_pair[1] = str( int(splitted_pair[1])*scale )
 
 			if len(splitted_pair) == 2:
