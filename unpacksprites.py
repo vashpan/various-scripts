@@ -54,11 +54,20 @@ def texture_path(plist_path):
 	return texture
 
 def image_from_frame(frame, texture):
+	if frame['rotated'] == True:
+		tmp = frame['width']
+		frame['width']  = frame['height']
+		frame['height'] = tmp 
+
 	box = ( int(frame['x']), int(frame['y']), 
 	        int(frame['x'] + frame['width']), int(frame['y'] + frame['height']) )  
-	
+
 	im = Image.open(texture)
-	return im.crop(box)
+	im = im.crop(box)
+	if frame['rotated'] == True:
+		im = im.rotate(90)
+
+	return im
 	
 def save_sprite(img, frame_name, target_dir):
 	if not os.path.exists(target_dir):
@@ -96,6 +105,7 @@ sheet_version = sheet_format_version(root)
 print 'Texture name: %s' % texture
 for frame_name in root['frames']:
 	frame = None
+	rotated = False
 	if sheet_version == 1:
 		# support for modern sprite sheet format
 		sprite = root['frames'][frame_name]
@@ -105,24 +115,29 @@ for frame_name in root['frames']:
 		elif 'textureRect' in sprite:
 			pos_rect = eval(sprite['textureRect'].replace('{', '[').replace('}', ']'))
 		
+		if 'rotated' in sprite:
+			rotated = sprite['rotated']
+
 		x      = pos_rect[0][0]
 		y      = pos_rect[0][1]
 		width  = pos_rect[1][0]
 		height = pos_rect[1][1]
 		
 		frame = dict()
-		frame['x']      = x
-		frame['y']      = y
-		frame['width']  = width
-		frame['height'] = height
+		frame['x']       = x
+		frame['y']       = y
+		frame['width']   = width
+		frame['height']  = height
+		frame['rotated'] = rotated
 	else:
 		sheet_frame = root['frames'][frame_name]
 		
 		frame = dict()
-		frame['x']      = sheet_frame['x']
-		frame['y']      = sheet_frame['y']
-		frame['width']  = sheet_frame['width']
-		frame['height'] = sheet_frame['height']
+		frame['x']       = sheet_frame['x']
+		frame['y']       = sheet_frame['y']
+		frame['width']   = sheet_frame['width']
+		frame['height']  = sheet_frame['height']
+		frame['rotated'] = rotated
 	
 	frame['name'] = frame_name
 	print "%s\t => x:%d y:%d w:%d h:%d" % (frame_name, frame['x'], frame['y'], frame['width'], frame['height'])
