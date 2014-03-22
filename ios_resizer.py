@@ -19,19 +19,19 @@ kValidSourceIconSizes = ( (512, 512), (1024,1024) )
 kValidSourceDefaultScreenSizes = ( (640, 1136), (2048, 1496), (1536, 2008) ) 
 
 kIconSizes = [
-	('-60@2x.png', (120, 120)),
-	('-76.png', (76, 76)),
-	('-76@2x.png', (152, 152)),
-	('.png', (57, 57)),
-	('-@2x.png', (114, 114)),
-	('-72.png', (72, 72)),
-	('-72@2x.png', (144, 144)),
-	('-Small-40.png', (40, 40)),
-	('-Small-40@2x.png', (80, 80)),
-	('-Small.png', (29, 29)),
-	('-Small@2x.png', (58, 58)),
-	('-Small-50.png', (50, 50)),
-	('-Small-50@2x.png', (100, 100)),
+	('Icon-60@2x.png', (120, 120)),
+	('Icon-76.png', (76, 76)),
+	('Icon-76@2x.png', (152, 152)),
+	('Icon.png', (57, 57)),
+	('Icon@2x.png', (114, 114)),
+	('Icon-72.png', (72, 72)),
+	('Icon-72@2x.png', (144, 144)),
+	('Icon-Small-40.png', (40, 40)),
+	('Icon-Small-40@2x.png', (80, 80)),
+	('Icon-Small.png', (29, 29)),
+	('Icon-Small@2x.png', (58, 58)),
+	('Icon-Small-50.png', (50, 50)),
+	('Icon-Small-50@2x.png', (100, 100)),
 
 	('iTunesArtwork', (512, 512))
 ]
@@ -65,9 +65,30 @@ def print_help():
 
 # Support for commands
 def handle_icon_cmd(args):
+	if len(args) > 2:
+		error("wrong number of icon command arguments!")
 
+	# by default, out dir is current dir
+	outdir = "."
+	infile = args[0]
+	if len(args) == 2:
+		outdir = args[1]
 
-	return False
+	im = None
+	try:
+		im = Image.open(infile)
+	except IOError:
+		error("cannot find input file: %s" % (infile))
+		
+	for icon in kIconSizes:
+		outfile = os.path.join(outdir, icon[0])
+		size = icon[1]
+
+		log_file_operation(outfile)
+		outim = im.resize(size, Image.ANTIALIAS)
+		outim.save(outfile, "PNG")
+
+	return 
 
 def handle_image_cmd(args):
 	return False
@@ -85,11 +106,11 @@ if len(sys.argv) == 1:
 
 cmd = sys.argv[1]
 if cmd == "icon":
-	handle_icon_cmd(sys.argv[1:])
+	handle_icon_cmd(sys.argv[2:])
 elif cmd == "image":
-	handle_image_cmd(sys.argv[1:])
+	handle_image_cmd(sys.argv[2:])
 elif cmd == "defaultscreen":
-	handle_defaultscreen_cmd(sys.argv[1:])
+	handle_defaultscreen_cmd(sys.argv[2:])
 elif cmd == "help" or cmd == "h" or cmd == "-h":
 	print_help()
 else:
