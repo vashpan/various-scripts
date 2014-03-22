@@ -79,7 +79,18 @@ def handle_icon_cmd(args):
 		im = Image.open(infile)
 	except IOError:
 		error("cannot find input file: %s" % (infile))
-		
+
+	# check if source file has a proper size
+	vs = kValidSourceIconSizes
+	size_valid = False
+	for size in vs:
+		if size == im.size:
+			size_valid = True
+			break
+
+	if size_valid == False:
+		error("invalid size of source icon! Possible sizes: %dx%d and %dx%d" % (vs[0][0], vs[0][1], vs[1][0], vs[1][0]))
+
 	for icon in kIconSizes:
 		outfile = os.path.join(outdir, icon[0])
 		size = icon[1]
@@ -87,8 +98,7 @@ def handle_icon_cmd(args):
 		log_file_operation(outfile)
 		outim = im.resize(size, Image.ANTIALIAS)
 		outim.save(outfile, "PNG")
-
-	return 
+#
 
 def handle_image_cmd(args):
 	return False
