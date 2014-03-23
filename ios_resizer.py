@@ -70,7 +70,7 @@ def handle_icon_cmd(args):
 
 	# by default, out dir is current dir
 	outdir = "."
-	infile = args[0]
+	infile = os.path.expanduser(args[0])
 	if len(args) == 2:
 		outdir = args[1]
 
@@ -101,40 +101,44 @@ def handle_icon_cmd(args):
 #
 
 def handle_image_cmd(args):
-	if len(args) > 2:
+	if len(args) < 2:
 		error("wrong number of image command arguments!")
 
-	# by default, out dir is current dir
-	outdir = "."
-	infile = args[0]
-	if len(args) == 2:
-		outdir = args[1]
+	# by default, out dir is current dir, so we check if last item is a directory
+	outdir = None
+	infiles = args[0:-1]
+	outdir = os.path.expanduser(args[-1])
+	if not os.path.isdir(outdir):
+		infiles.append(outdir)
+		outdir = "."
 
-	im = None
-	try:
-		im = Image.open(infile)
-	except IOError:
-		error("cannot find input file: %s" % (infile))
+	for infile in infiles:
+		im = None
+		try:
+			im = Image.open(infile)
+		except IOError:
+			error("cannot find input file: %s" % (infile))
 
-	infileBase, ext = os.path.splitext(infile)
-	retinaPostfix = "@2x"
-	hasRetinaPostfix = False
-	if infileBase[-3:] == retinaPostfix:
-		infileBase = infileBase[0:-3]
-		hasRetinaPostfix = True
+		infileBase, ext = os.path.splitext(infile)
+		retinaPostfix = "@2x"
+		hasRetinaPostfix = False
+		if infileBase[-3:] == retinaPostfix:
+			infileBase = infileBase[0:-3]
+			hasRetinaPostfix = True
 
-	# create retina image if not exists
-	if not hasRetinaPostfix:
-		outfile = infileBase + retinaPostfix + ext
+		# create retina image if not exists
+		if not hasRetinaPostfix:
+			outfile = infileBase + retinaPostfix + ext
+			log_file_operation(outfile)
+			im.save(outfile)
+
+		# always create non-retina image
+		outfile = infileBase + ext
+		smallSize  = (im.size[0] / 2, im.size[1] / 2)
+		outim = im.resize(smallSize, Image.ANTIALIAS)
 		log_file_operation(outfile)
-		im.save(outfile)
-
-	# always create non-retina image
-	outfile = infileBase + ext
-	smallSize  = (im.size[0] / 2, im.size[1] / 2)
-	outim = im.resize(smallSize, Image.ANTIALIAS)
-	log_file_operation(outfile)
-	outim.save(outfile)
+		outim.save(outfile)
+	#
 #
 
 def handle_defaultscreen_cmd(args):
