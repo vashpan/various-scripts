@@ -101,7 +101,41 @@ def handle_icon_cmd(args):
 #
 
 def handle_image_cmd(args):
-	return False
+	if len(args) > 2:
+		error("wrong number of image command arguments!")
+
+	# by default, out dir is current dir
+	outdir = "."
+	infile = args[0]
+	if len(args) == 2:
+		outdir = args[1]
+
+	im = None
+	try:
+		im = Image.open(infile)
+	except IOError:
+		error("cannot find input file: %s" % (infile))
+
+	infileBase, ext = os.path.splitext(infile)
+	retinaPostfix = "@2x"
+	hasRetinaPostfix = False
+	if infileBase[-3:] == retinaPostfix:
+		infileBase = infileBase[0:-3]
+		hasRetinaPostfix = True
+
+	# create retina image if not exists
+	if not hasRetinaPostfix:
+		outfile = infileBase + retinaPostfix + ext
+		log_file_operation(outfile)
+		im.save(outfile)
+
+	# always create non-retina image
+	outfile = infileBase + ext
+	smallSize  = (im.size[0] / 2, im.size[1] / 2)
+	outim = im.resize(smallSize, Image.ANTIALIAS)
+	log_file_operation(outfile)
+	outim.save(outfile)
+#
 
 def handle_defaultscreen_cmd(args):
 	# todo: remember to name iPad splash screens differently for portrait and landscape
