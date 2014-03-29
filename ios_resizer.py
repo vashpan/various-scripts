@@ -16,7 +16,7 @@ from PIL import Image
 
 # Constant sizes for checking
 kValidSourceIconSizes = ( (512, 512), (1024,1024) )
-kValidSourceDefaultScreenSizes = ( (640, 1136), (2048, 1496), (1536, 2008) ) 
+kValidSourceDefaultScreenSizes = ( (2048, 1496), (1536, 2008) ) 
 
 kIconSizes = [
 	('Icon-60@2x.png', (120, 120)),
@@ -36,14 +36,17 @@ kIconSizes = [
 	('iTunesArtwork', (512, 512))
 ]
 
-kDefaultScreenSizes = [
-	('Default.png', (320, 480)),
-	('Default@2x.png', (640, 960)),
-	('Default-568@2x.png', (640, 1136)),
-	('Default-Landscape.png', (1024, 748)),
-	('Default-Portrait.png', (768, 1004)),
-	('Default-Landscape@2x.png', (2048, 1496)),
-	('Default-Portrait@2x.png', (1536, 2008)),
+kiPhoneDefaultScreenSizes = [
+	('Default.png', (320, 480), 0),
+	('Default@2x.png', (640, 960), 0),
+	('Default-568@2x.png', (640, 1136), 0),
+]
+
+kiPadDefaultScreenSizes = [
+	('Default-Landscape.png', (1024, 748), 1),
+	('Default-Portrait.png', (768, 1004), 0),
+	('Default-Landscape@2x.png', (2048, 1496), 1),
+	('Default-Portrait@2x.png', (1536, 2008), 0),
 ]
 
 # Utility functions
@@ -143,7 +146,80 @@ def handle_image_cmd(args):
 
 def handle_defaultscreen_cmd(args):
 	# todo: remember to name iPad splash screens differently for portrait and landscape
-	return False
+	if len(args) > 2:
+		error("wrong number of icon command arguments!")
+
+	# by default, out dir is current dir
+	outdir = "."
+	infile = os.path.expanduser(args[0])
+	if len(args) == 2:
+		outdir = args[1]
+
+	im = None
+	try:
+		im = Image.open(infile)
+	except IOError:
+		error("cannot find input file: %s" % (infile))
+
+	# check if source file has a proper size and calculate orientation
+	kOrientationLandscape = 0
+	kOrientationPortrait  = 1
+	vs = kValidSourceDefaultScreenSizes
+	orientation = 0
+	size_valid = False
+	for size in vs:
+		if size == im.size:
+			size_valid = True
+			if size[0] > size[1]:
+				orientation = kOrientationLandscape
+			else:
+				orientation = kOrientationPortrait
+			break
+
+	if size_valid == False:
+		error("invalid size of default screen source! Possible sizes: %dx%d and %dx%d" % (vs[0][0], vs[0][1], vs[1][0], vs[1][0]))
+
+	retinaPostfix = "@2x"
+	all_default_screens = kiPhoneDefaultScreenSizes + kiPadDefaultScreenSizes
+	for defaultscreen in all_default_screens:
+		outfile = os.path.join(outdir, defaultscreen[0])
+		size = defaultscreen[1]
+		scrorientation = defaultscreen[2]
+		isretina = (os.path.splitext(outfile)[0][-3:] == retinaPostfix)
+		isiphone = (defaultscreen in kiPhoneDefaultScreenSizes)
+		isipad = (defaultscreen in kiPadDefaultScreenSizes)
+
+		log_file_operation(outfile)
+
+		# rotate if necessary
+		inim = im.copy()
+		if orientation != scrorientation:
+			inim = inim.rotate(-180, Image.NEAREST)
+
+		# downsize if necessary
+		if isiphone:
+			inim = inim.resize((inim.size[0]/2, inim.size[1]/2), Image.ANTIALIAS)
+
+		# crop image
+		if isretina:
+			cropscale = 1
+		else:
+			cropscale = 2
+
+		W = inim.size[0]
+		H = inim.size[1]
+		w = size[0] * cropscale
+		h = size[1] * cropscale
+		cropbox = ( (W-w)/2, (H-h)/2, W-(W-w)/2, H-(H-h)/2 )
+		outim = inim.crop(cropbox)
+		
+		# resize if non-retina
+		if not isretina:
+			outim = outim.resize(size, Image.ANTIALIAS)
+		outim.save(outfile, "PNG")
+	#
+#
+
 
 
 
