@@ -2,7 +2,16 @@
 
 # This script is a utility that provides easy methods to create images for iOS development
 # 
-# It requires Pillow library and it is tested on OS X 10.9 with Xcode 5.1, 
+# It requires Pillow library and it is tested on OS X 10.9 with Xcode 5.1
+# 
+# Installation of Pillow library on OS X 10.9 and Xcode 5.1:
+# $ xcode-select --install
+# $ sudo su
+# $ export ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future"
+# $ easy_install pillow
+#
+# Why such weird steps? Newest clang is treating some wrong-flags warnings as errors, so we need to override it.
+#
 
 import os, os.path, sys
 
