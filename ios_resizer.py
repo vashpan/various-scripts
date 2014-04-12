@@ -25,7 +25,7 @@ from PIL import Image
 
 # Constant sizes for checking
 kValidSourceIconSizes = ( (512, 512), (1024,1024) )
-kValidSourceDefaultScreenSizes = ( (2048, 1496), (1536, 2008) ) 
+kValidSourceDefaultScreenSize = (2300, 2300) 
 
 kIconSizes = [
 	('Icon-60@2x.png', (120, 120)),
@@ -45,6 +45,7 @@ kIconSizes = [
 	('iTunesArtwork', (512, 512))
 ]
 
+# (filename, width, height, landscape?)
 kiPhoneDefaultScreenSizes = [
 	('Default.png', (320, 480), 0),
 	('Default@2x.png', (640, 960), 0),
@@ -173,20 +174,11 @@ def handle_defaultscreen_cmd(args):
 	# check if source file has a proper size and calculate orientation
 	kOrientationLandscape = 0
 	kOrientationPortrait  = 1
-	vs = kValidSourceDefaultScreenSizes
 	orientation = 0
-	size_valid = False
-	for size in vs:
-		if size == im.size:
-			size_valid = True
-			if size[0] > size[1]:
-				orientation = kOrientationLandscape
-			else:
-				orientation = kOrientationPortrait
-			break
+	size_valid = (im.size == kValidSourceDefaultScreenSize)
 
 	if size_valid == False:
-		error("invalid size of default screen source! Possible sizes: %dx%d and %dx%d" % (vs[0][0], vs[0][1], vs[1][0], vs[1][0]))
+		error("invalid size of default screen source! Possible size: %dx%d" % (kValidSourceDefaultScreenSize[0], kValidSourceDefaultScreenSize[1]))
 
 	retinaPostfix = "@2x"
 	all_default_screens = kiPhoneDefaultScreenSizes + kiPadDefaultScreenSizes
