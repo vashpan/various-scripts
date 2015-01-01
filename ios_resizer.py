@@ -5,10 +5,12 @@
 # It requires Pillow library and it is tested on OS X 10.9 with Xcode 5.1
 # 
 # Installation of Pillow library on OS X 10.9 and Xcode 5.1:
-# $ xcode-select --install
-# $ sudo su
-# $ export ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future"
-# $ easy_install pillow
+# 1. Install XQuartz 
+# 2. Run those commands in Terminal:
+# 	 $ xcode-select --install
+# 	 $ sudo su
+# 	 $ export ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future"
+# 	 $ easy_install pillow
 #
 # Why such weird steps? Newest clang is treating some wrong-flags warnings as errors, so we need to override it.
 #
@@ -76,6 +78,10 @@ def print_help():
 	print "defaultscreen <source_default_screen> [destination_directory]"
 	print "help - prints this message"
 
+def make_sure_dir_exists(dirname):
+	if not os.path.exists(dirname):
+ 		os.makedirs(dirname)	
+
 # Support for commands
 def handle_icon_cmd(args):
 	if len(args) > 2:
@@ -86,6 +92,7 @@ def handle_icon_cmd(args):
 	infile = os.path.expanduser(args[0])
 	if len(args) == 2:
 		outdir = args[1]
+		make_sure_dir_exists(outdir)
 
 	im = None
 	try:
@@ -121,6 +128,8 @@ def handle_image_cmd(args):
 	outdir = None
 	infiles = args[0:-1]
 	outdir = os.path.expanduser(args[-1])
+	if outdir != None:
+		make_sure_dir_exists(outdir)
 	if not os.path.isdir(outdir):
 		infiles.append(outdir)
 		outdir = "."
@@ -164,6 +173,7 @@ def handle_defaultscreen_cmd(args):
 	infile = os.path.expanduser(args[0])
 	if len(args) == 2:
 		outdir = args[1]
+		make_sure_dir_exists(outdir)
 
 	im = None
 	try:
