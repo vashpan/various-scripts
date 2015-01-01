@@ -2,25 +2,25 @@
 
 # This script is a utility that provides easy methods to create images for iOS development
 # 
-# It requires Pillow library and it is tested on OS X 10.9 with Xcode 5.1
+# It requires Pillow library and it is tested on OS X 10.10 with Xcode 6.1
 # 
-# Installation of Pillow library on OS X 10.9 and Xcode 5.1:
-# 1. Install XQuartz 
-# 2. Run those commands in Terminal:
-# 	 $ xcode-select --install
-# 	 $ sudo su
-# 	 $ export ARCHFLAGS="-Wno-error=unused-command-line-argument-hard-error-in-future"
-# 	 $ easy_install pillow
-#
-# Why such weird steps? Newest clang is treating some wrong-flags warnings as errors, so we need to override it.
-#
+# Easiest installation of Pillow library:
+# 1. Make sure you have 'brew' installed
+# 2. Make sure you have 'pip' installed (sudo easy_install pip)
+# 2. Install all Pillow requirements for support many formats:
+# 	$ brew install libtiff libjpeg webp little-cms2
+# 3. Install Pillow from PIP repository:
+#	$ pip install Pillow
+# 
+# For more information go here: http://pillow.readthedocs.org/en/latest/installation.html
+# Enjoy! 
 
 import os, os.path, sys
 
 try:
 	__import__("PIL")
 except ImportError:
-	print "This script requires Pillow library! You can find instructions for install here: http://pillow.readthedocs.org/en/latest/"
+	print "This script requires Pillow library! You can find instructions for install here: http://pillow.readthedocs.org/en/latest/installation.html"
 	exit(1)
 
 from PIL import Image
