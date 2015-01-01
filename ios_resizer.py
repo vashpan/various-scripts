@@ -31,6 +31,7 @@ kValidSourceDefaultScreenSize = (2300, 2300)
 
 kIconSizes = [
 	('Icon-60@2x.png', (120, 120)),
+	('Icon-60@3x.png', (180, 180)),
 	('Icon-76.png', (76, 76)),
 	('Icon-76@2x.png', (152, 152)),
 	('Icon.png', (57, 57)),
@@ -39,12 +40,14 @@ kIconSizes = [
 	('Icon-72@2x.png', (144, 144)),
 	('Icon-Small-40.png', (40, 40)),
 	('Icon-Small-40@2x.png', (80, 80)),
+	('Icon-Small-40@3x.png', (120, 120)),
 	('Icon-Small.png', (29, 29)),
 	('Icon-Small@2x.png', (58, 58)),
+	('Icon-Small@3x.png', (87, 87)),
 	('Icon-Small-50.png', (50, 50)),
 	('Icon-Small-50@2x.png', (100, 100)),
 
-	('iTunesArtwork', (512, 512))
+	('iTunesArtwork', (1024, 1024))
 ]
 
 # (filename, width, height, landscape?)
@@ -52,6 +55,9 @@ kiPhoneDefaultScreenSizes = [
 	('Default.png', (320, 480), 0),
 	('Default@2x.png', (640, 960), 0),
 	('Default-568@2x.png', (640, 1136), 0),
+	('Default-667@2x.png', (750, 1334), 0),
+	('Default-736@3x.png', (1242, 2208), 0),
+	('Default-Landscape-736@3x.png', (2208, 1242), 1)
 ]
 
 kiPadDefaultScreenSizes = [
