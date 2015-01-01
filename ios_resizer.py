@@ -27,7 +27,7 @@ from PIL import Image
 
 # Constant sizes for checking
 kValidSourceIconSize = (1024,1024)
-kValidSourceDefaultScreenSize = (2300, 2300) 
+kValidSourceDefaultScreenSize = (2300, 2700) 
 
 kIconSizes = [
 	('Icon-60@2x.png', (120, 120)),
@@ -80,8 +80,7 @@ def print_help():
 	print "%s <command> <args>\n" % (sys.argv[0])
 	print "Valid commands:\n"
 	print "icon <source_icon> [destination_directory]"
-	print "image <source_image> [destination_directory]"
-	print "defaultscreen <source_default_screen> [destination_directory]"
+	print "launchscreen <source_launch_screen> [destination_directory]"
 	print "help - prints this message"
 
 def make_sure_dir_exists(dirname):
@@ -121,50 +120,7 @@ def handle_icon_cmd(args):
 		outim.save(outfile, "PNG")
 #
 
-def handle_image_cmd(args):
-	if len(args) < 2:
-		error("wrong number of image command arguments!")
-
-	# by default, out dir is current dir, so we check if last item is a directory
-	outdir = None
-	infiles = args[0:-1]
-	outdir = os.path.expanduser(args[-1])
-	if outdir != None:
-		make_sure_dir_exists(outdir)
-	if not os.path.isdir(outdir):
-		infiles.append(outdir)
-		outdir = "."
-
-	for infile in infiles:
-		im = None
-		try:
-			im = Image.open(infile)
-		except IOError:
-			error("cannot find input file: %s" % (infile))
-
-		infileBase, ext = os.path.splitext(infile)
-		retinaPostfix = "@2x"
-		hasRetinaPostfix = False
-		if infileBase[-3:] == retinaPostfix:
-			infileBase = infileBase[0:-3]
-			hasRetinaPostfix = True
-
-		# create retina image if not exists
-		if not hasRetinaPostfix:
-			outfile = infileBase + retinaPostfix + ext
-			log_file_operation(outfile)
-			im.save(outfile)
-
-		# always create non-retina image
-		outfile = infileBase + ext
-		smallSize  = (im.size[0] / 2, im.size[1] / 2)
-		outim = im.resize(smallSize, Image.ANTIALIAS)
-		log_file_operation(outfile)
-		outim.save(outfile)
-	#
-#
-
-def handle_defaultscreen_cmd(args):
+def handle_launchscreen_cmd(args):
 	# todo: remember to name iPad splash screens differently for portrait and landscape
 	if len(args) > 2:
 		error("wrong number of icon command arguments!")
@@ -191,25 +147,25 @@ def handle_defaultscreen_cmd(args):
 	if size_valid == False:
 		error("invalid size of default screen source! Possible size: %dx%d" % (kValidSourceDefaultScreenSize[0], kValidSourceDefaultScreenSize[1]))
 
-	retinaPostfix = "@2x"
+	retinaPostfix = ("@2x", "@3x")
+	retinaScale = 1
 	all_default_screens = kiPhoneDefaultScreenSizes + kiPadDefaultScreenSizes
-	for defaultscreen in all_default_screens:
-		outfile = os.path.join(outdir, defaultscreen[0])
-		size = defaultscreen[1]
-		scrorientation = defaultscreen[2]
-		isretina = (os.path.splitext(outfile)[0][-3:] == retinaPostfix)
-		isiphone = (defaultscreen in kiPhoneDefaultScreenSizes)
-		isipad = (defaultscreen in kiPadDefaultScreenSizes)
+	for launchscreen in all_default_screens:
+		outfile = os.path.join(outdir, launchscreen[0])
+		size = launchscreen[1]
+		scrorientation = launchscreen[2]
+		postfix = os.path.splitext(outfile)[0][-3:]
+		isretina = (postfix in retinaPostfix)
+		if isretina:
+			retinaScale = int(postfix[1])
+		isiphone = (launchscreen in kiPhoneDefaultScreenSizes)
+		isipad = (launchscreen in kiPadDefaultScreenSizes)
 
 		log_file_operation(outfile)
 
-		# rotate if necessary
+		# copy & downsize if necessary (not on 6+)
 		inim = im.copy()
-		if orientation != scrorientation:
-			inim = inim.rotate(-180, Image.NEAREST)
-
-		# downsize if necessary
-		if isiphone:
+		if isiphone and retinaScale < 3:
 			inim = inim.resize((inim.size[0]/2, inim.size[1]/2), Image.ANTIALIAS)
 
 		# crop image
@@ -243,10 +199,8 @@ if len(sys.argv) == 1:
 cmd = sys.argv[1]
 if cmd == "icon":
 	handle_icon_cmd(sys.argv[2:])
-elif cmd == "image":
-	handle_image_cmd(sys.argv[2:])
-elif cmd == "defaultscreen":
-	handle_defaultscreen_cmd(sys.argv[2:])
+elif cmd == "launchscreen":
+	handle_launchscreen_cmd(sys.argv[2:])
 elif cmd == "help" or cmd == "h" or cmd == "-h":
 	print_help()
 else:
