@@ -26,7 +26,7 @@ except ImportError:
 from PIL import Image
 
 # Constant sizes for checking
-kValidSourceIconSizes = ( (512, 512), (1024,1024) )
+kValidSourceIconSize = (1024,1024)
 kValidSourceDefaultScreenSize = (2300, 2300) 
 
 kIconSizes = [
@@ -107,12 +107,7 @@ def handle_icon_cmd(args):
 		error("cannot find input file: %s" % (infile))
 
 	# check if source file has a proper size
-	vs = kValidSourceIconSizes
-	size_valid = False
-	for size in vs:
-		if size == im.size:
-			size_valid = True
-			break
+	size_valid = (kValidSourceIconSize == im.size)
 
 	if size_valid == False:
 		error("invalid size of source icon! Possible sizes: %dx%d and %dx%d" % (vs[0][0], vs[0][1], vs[1][0], vs[1][0]))
