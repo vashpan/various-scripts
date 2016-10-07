@@ -15,7 +15,7 @@
 # For more information go here: http://pillow.readthedocs.org/en/latest/installation.html
 # Enjoy! 
 
-import os, os.path, sys
+import os, os.path, sys, math
 
 try:
 	__import__("PIL")
@@ -301,7 +301,7 @@ def handle_image_cmd(args):
 		scale = kImagePostfixes[postfix]
 		outfile = os.path.join(outdir, basename + postfix + ext)
 
-		size = (int(im.size[0] * scale), int(im.size[1] * scale))
+		size = (int(math.ceil(im.size[0] * scale)), int(math.ceil(im.size[1] * scale)))
 		log_file_operation(outfile)
 		outim = im.resize(size, Image.ANTIALIAS)
 		outim.save(outfile, "PNG")
