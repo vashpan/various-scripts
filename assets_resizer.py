@@ -73,9 +73,9 @@ kiPhoneDefaultScreenSizes = [
 
 kiPadDefaultScreenSizes = [
 	('Default-Landscape.png', (1024, 748), 1),
-	('Default-Portrait.png', (768, 1004), 0),
+	('Default-Portrait.png', (768, 1024), 0),
 	('Default-Landscape@2x.png', (2048, 1496), 1),
-	('Default-Portrait@2x.png', (1536, 2008), 0),
+	('Default-Portrait@2x.png', (1536, 2048), 0),
 ]
 
 kiPhoneScreenshotSizes = [
