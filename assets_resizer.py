@@ -62,21 +62,6 @@ kIconSizes = [
 ]
 
 # (filename, width, height, landscape?)
-kiPhoneDefaultScreenSizes = [
-	('Default.png', (320, 480), 0),
-	('Default@2x.png', (640, 960), 0),
-	('Default-568@2x.png', (640, 1136), 0),
-	('Default-667@2x.png', (750, 1334), 0),
-	('Default-736@3x.png', (1242, 2208), 0),
-	('Default-Landscape-736@3x.png', (2208, 1242), 1)
-]
-
-kiPadDefaultScreenSizes = [
-	('Default-Landscape.png', (1024, 748), 1),
-	('Default-Portrait.png', (768, 1024), 0),
-	('Default-Landscape@2x.png', (2048, 1496), 1),
-	('Default-Portrait@2x.png', (1536, 2048), 0),
-]
 
 kiPhoneScreenshotSizes = [
 	('-iP4-960x640.png', (960, 640)),
@@ -104,7 +89,6 @@ def print_help():
 	print "Valid commands:\n"
 	print "image <source_image> [destination_directory]"
 	print "icon <source_icon> [destination_directory]"
-	print "launchscreen <source_launch_screen> [destination_directory]"
 	print "screenshot --ipad/--iphone <source_screenshot> [destination_directory]"
 	print "help - prints this message"
 
@@ -143,74 +127,6 @@ def handle_icon_cmd(args):
 		log_file_operation(outfile)
 		outim = im.resize(size, Image.ANTIALIAS)
 		outim.save(outfile, "PNG")
-#
-
-def handle_launchscreen_cmd(args):
-	# todo: remember to name iPad splash screens differently for portrait and landscape
-	if len(args) > 2:
-		error("wrong number of icon command arguments!")
-
-	# by default, out dir is current dir
-	outdir = "."
-	infile = os.path.expanduser(args[0])
-	if len(args) == 2:
-		outdir = args[1]
-		make_sure_dir_exists(outdir)
-
-	im = None
-	try:
-		im = Image.open(infile)
-	except IOError:
-		error("cannot find input file: %s" % (infile))
-
-	# check if source file has a proper size and calculate orientation
-	kOrientationLandscape = 0
-	kOrientationPortrait  = 1
-	orientation = 0
-	size_valid = (im.size == kValidSourceDefaultScreenSize)
-
-	if size_valid == False:
-		error("invalid size of default screen source! Possible size: %dx%d" % (kValidSourceDefaultScreenSize[0], kValidSourceDefaultScreenSize[1]))
-
-	retinaPostfix = ("@2x", "@3x")
-	retinaScale = 1
-	all_default_screens = kiPhoneDefaultScreenSizes + kiPadDefaultScreenSizes
-	for launchscreen in all_default_screens:
-		outfile = os.path.join(outdir, launchscreen[0])
-		size = launchscreen[1]
-		scrorientation = launchscreen[2]
-		postfix = os.path.splitext(outfile)[0][-3:]
-		isretina = (postfix in retinaPostfix)
-		if isretina:
-			retinaScale = int(postfix[1])
-		isiphone = (launchscreen in kiPhoneDefaultScreenSizes)
-		isipad = (launchscreen in kiPadDefaultScreenSizes)
-
-		log_file_operation(outfile)
-
-		# copy & downsize if necessary (not on 6+)
-		inim = im.copy()
-		if isiphone and retinaScale < 3:
-			inim = inim.resize((inim.size[0]/2, inim.size[1]/2), Image.ANTIALIAS)
-
-		# crop image
-		if isretina:
-			cropscale = 1
-		else:
-			cropscale = 2
-
-		W = inim.size[0]
-		H = inim.size[1]
-		w = size[0] * cropscale
-		h = size[1] * cropscale
-		cropbox = ( (W-w)/2, (H-h)/2, W-(W-w)/2, H-(H-h)/2 )
-		outim = inim.crop(cropbox)
-		
-		# resize if non-retina
-		if not isretina:
-			outim = outim.resize(size, Image.ANTIALIAS)
-		outim.save(outfile, "PNG")
-	#
 #
 
 def handle_screenshot_cmd(args):
@@ -307,7 +223,6 @@ def handle_image_cmd(args):
 		outim.save(outfile, "PNG")
 #
 
-
 # start
 if len(sys.argv) == 1:
 	print_help()
@@ -316,8 +231,6 @@ if len(sys.argv) == 1:
 cmd = sys.argv[1]
 if cmd == "icon":
 	handle_icon_cmd(sys.argv[2:])
-elif cmd == "launchscreen":
-	handle_launchscreen_cmd(sys.argv[2:])
 elif cmd == "screenshot":
 	handle_screenshot_cmd(sys.argv[2:])
 elif cmd == "image":
