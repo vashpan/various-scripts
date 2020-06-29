@@ -43,22 +43,22 @@ kIconSizes = [
 	('Icon-76.png', (76, 76)),
 	('Icon-76@2x.png', (152, 152)),
 	('Icon-83@2x.png', (167, 167)), # 83.5 x 2 in fact, for iPad Pro
-	('Icon.png', (57, 57)),
-	('Icon@2x.png', (114, 114)),
+	('Icon-57.png', (57, 57)),
+	('Icon-57@2x.png', (114, 114)),
 	('Icon-72.png', (72, 72)),
 	('Icon-72@2x.png', (144, 144)),
-	('Icon-Small-40.png', (40, 40)),
-	('Icon-Small-40@2x.png', (80, 80)),
-	('Icon-Small-40@3x.png', (120, 120)),
-	('Icon-Small.png', (29, 29)),
-	('Icon-Small@2x.png', (58, 58)),
-	('Icon-Small@3x.png', (87, 87)),
-	('Icon-Small-50.png', (50, 50)),
+	('Icon-40.png', (40, 40)),
+	('Icon-40@2x.png', (80, 80)),
+	('Icon-40@3x.png', (120, 120)),
+	('Icon-29.png', (29, 29)),
+	('Icon-29@3x.png', (87, 87)),
+	('Icon-50.png', (50, 50)),
+	('Icon-29@2x.png', (58, 58)),
 	('Icon-20.png', (20, 20)),
 	('Icon-20@2x.png', (40, 40)),
 	('Icon-20@3x.png', (60, 60)),
 
-	('iTunesArtwork', (1024, 1024))
+	('AppStore-iOS.png', (1024, 1024))
 ]
 
 # (filename, width, height, landscape?)
