@@ -57,7 +57,25 @@ ios_icon_sizes = [
 	('iOS-Icon-20@2x.png', (40, 40)),
 	('iOS-Icon-20@3x.png', (60, 60)),
 
-	('iOS-AppStore-iOS.png', (1024, 1024))
+	('iOS-AppStore.png', (1024, 1024))
+]
+
+watchos_icon_sizes = [
+	('watchOS-Icon-24@2x.png', (48, 48)),
+	('watchOS-Icon-27@2x.png', (55, 55)),
+
+	('watchOS-Icon-29@2x.png', (58, 58)),
+	('watchOS-Icon-29@3x.png', (87, 87)),
+
+	('watchOS-Icon-40@2x.png', (80, 80)),
+	('watchOS-Icon-44@2x.png', (88, 88)),
+	('watchOS-Icon-50@2x.png', (100, 100)),
+
+	('watchOS-Icon-86@2x.png', (172, 172)),
+	('watchOS-Icon-98@2x.png', (196, 196)),
+	('watchOS-Icon-108@2x.png', (216, 216)),
+
+	('watchOS-AppStore.png', (1024, 1024)),
 ]
 
 # Utility functions
@@ -104,8 +122,20 @@ def handle_icon_cmd(args):
 	if size_valid == False:
 		error("invalid size of source icon! Valid size: %dx%d" % (valid_source_icon_size[0], valid_source_icon_size[1]) )
 
+	ios_out_dir = os.path.join(outdir, "iOS")
+	make_sure_dir_exists(ios_out_dir)
 	for icon in ios_icon_sizes:
-		outfile = os.path.join(outdir, icon[0])
+		outfile = os.path.join(ios_out_dir, icon[0])
+		size = icon[1]
+
+		log_file_operation(outfile)
+		outim = im.resize(size, Image.ANTIALIAS)
+		outim.save(outfile, "PNG")
+
+	watchos_out_dir = os.path.join(outdir, "watchOS")
+	make_sure_dir_exists(watchos_out_dir)
+	for icon in watchos_icon_sizes:
+		outfile = os.path.join(watchos_out_dir, icon[0])
 		size = icon[1]
 
 		log_file_operation(outfile)
