@@ -2,7 +2,7 @@
 
 # TODOs:
 # - add option to use "hdiutil" and .dmg format
-# - maybe try to estimate % of progress according to input? 
+# - try to not compress uncompressable data, tips here: https://sourceforge.net/p/p7zip/discussion/383044/thread/e3c9db96/ 
 
 import sys, os
 from getpass import getpass
