@@ -39,23 +39,31 @@ image_postfixes = {
 ios_icon_sizes = [
 	('iOS-Icon-60@2x.png', (120, 120)),
 	('iOS-Icon-60@3x.png', (180, 180)),
+	
 	('iOS-Icon-76.png', (76, 76)),
 	('iOS-Icon-76@2x.png', (152, 152)),
+	
 	('iOS-Icon-83@2x.png', (167, 167)), # 83.5 x 2 in fact, for iPad Pro
+	
 	('iOS-Icon-57.png', (57, 57)),
 	('iOS-Icon-57@2x.png', (114, 114)),
+	
 	('iOS-Icon-72.png', (72, 72)),
 	('iOS-Icon-72@2x.png', (144, 144)),
+	
 	('iOS-Icon-40.png', (40, 40)),
 	('iOS-Icon-40@2x.png', (80, 80)),
 	('iOS-Icon-40@3x.png', (120, 120)),
+	
 	('iOS-Icon-29.png', (29, 29)),
 	('iOS-Icon-29@3x.png', (87, 87)),
-	('iOS-Icon-50.png', (50, 50)),
 	('iOS-Icon-29@2x.png', (58, 58)),
+
 	('iOS-Icon-20.png', (20, 20)),
 	('iOS-Icon-20@2x.png', (40, 40)),
 	('iOS-Icon-20@3x.png', (60, 60)),
+
+	('iOS-Icon-50.png', (50, 50)),
 
 	('iOS-AppStore.png', (1024, 1024))
 ]
