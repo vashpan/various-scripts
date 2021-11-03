@@ -78,6 +78,30 @@ watchos_icon_sizes = [
 	('watchOS-AppStore.png', (1024, 1024)),
 ]
 
+imessage_icon_sizes = [
+    ('iMessage-Icon-60x45@2x.png', (120, 90)),
+	('iMessage-Icon-60x45@3x.png', (180, 135)),
+
+	('iMessage-Icon-29@2x.png', (58, 58)),
+	('iMessage-Icon-29@3x.png', (87, 87)),
+
+	('iMessage-Icon-60x50@2x.png', (120, 100)),
+	('iMessage-Icon-60x50@3x.png', (180, 150)),
+
+	('iMessage-Icon-67x50@2x.png', (134, 100)),
+
+	('iMessage-Icon-74x55@2x.png', (148, 110)),
+
+	('iMessage-Icon-27x20@2x.png', (54, 40)),
+	('iMessage-Icon-27x20@3x.png', (81, 60)),
+
+	('iMessage-Icon-32x24@2x.png', (64, 48)),
+	('iMessage-Icon-32x24@3x.png', (96, 72)),
+
+	('iMessage-AppStore.png', (1024, 1024)),
+	('iMessage-MessagesAppStore.png', (1024, 768))
+]
+
 # Utility functions
 def error(msg=""):
 	print("error: %s" % (msg))
@@ -129,6 +153,7 @@ def handle_icon_cmd(args):
 		size = icon[1]
 
 		log_file_operation(outfile)
+		
 		outim = im.resize(size, Image.ANTIALIAS)
 		outim.save(outfile, "PNG")
 
@@ -139,7 +164,28 @@ def handle_icon_cmd(args):
 		size = icon[1]
 
 		log_file_operation(outfile)
+		
 		outim = im.resize(size, Image.ANTIALIAS)
+		outim.save(outfile, "PNG")
+
+	imessage_out_dir = os.path.join(outdir, "iMessage")
+	make_sure_dir_exists(imessage_out_dir)
+	for icon in imessage_icon_sizes:
+		outfile = os.path.join(imessage_out_dir, icon[0])
+		size = icon[1]
+
+		log_file_operation(outfile)
+
+		target_aspect_ratio = size[1] / size[0]
+		target_width = valid_source_icon_size[0]
+		target_height = valid_source_icon_size[1] * target_aspect_ratio
+		target_box = (
+			0, (valid_source_icon_size[1] - target_height) / 2.0, 
+			target_width, (valid_source_icon_size[1] - (valid_source_icon_size[1] - target_height) / 2.0)
+		)
+
+		tempim = im.crop(target_box)		
+		outim = tempim.resize(size, Image.ANTIALIAS)
 		outim.save(outfile, "PNG")
 #
 
