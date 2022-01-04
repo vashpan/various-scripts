@@ -2,18 +2,23 @@
 
 # This script is a utility that provides easy methods to create images for iOS development
 # 
-# It requires Pillow library and it is tested on OS X 11.0 with Xcode 12
+# It requires Pillow library and it is tested on OS X 12.x with Xcode 13
 # 
 # Easiest installation of Pillow library:
-# 1. Make sure you have 'brew' installed
-# 2. Make sure you have 'pip' installed (sudo easy_install pip)
-# 2. Install all Pillow requirements for support many formats:
-# 	$ brew install libtiff libjpeg webp little-cms2
+# 
+# 1. Make sure you have 'pip3' available
+#
+# 2. Install dependencies (choose your package manager):
+#   $ brew install libtiff libjpeg webp little-cms2
+# or...
+#   $ sudo port install tiff jpeg webp lcms2
+#
 # 3. Install Pillow from PIP repository:
-#	$ pip install Pillow
+#	$ pip3 install Pillow
 # 
 # For more information go here: http://pillow.readthedocs.org/en/latest/installation.html
 # Enjoy! 
+#
 
 import os, os.path, sys, math
 
