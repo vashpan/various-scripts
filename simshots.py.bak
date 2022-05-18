@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 
 # This script make periodical screenshots of currently active "iOS Simulator" into given folder
 
@@ -7,21 +7,21 @@ import os, os.path, sys, re, time
 from datetime import datetime
 
 def help():
-	print("Makes periodical screenshots of currently active 'iOS Simulator' into given folder")
-	print("")
-	print("Usage:")
-	print("%s -p=<period_in_minutes> -d=<target_folder>\n" % (sys.argv[0]))
+	print "Makes periodical screenshots of currently active 'iOS Simulator' into given folder"
+	print ""
+	print "Usage:"
+	print "%s -p=<period_in_minutes> -d=<target_folder>\n" % (sys.argv[0])
 
 def error(msg=""):
-	print("Error: %s" % (msg))
-	print("")
+	print "Error: %s" % (msg)
+	print ""
 	help()
 	exit(1)
 
 def takeScreenshot(folder, number):
 	screenshotName = datetime.now().strftime("SimShot-%Y_%m_%d-%H_%M_%S.jpg")
 	
-	print("Taking screenshot [" + str(number) + "]: " + "'" + screenshotName + "'")
+	print "Taking screenshot [" + str(number) + "]: " + "'" + screenshotName + "'"
 
 	os.system("xcrun simctl io booted screenshot --type=jpeg " + folder + "/" + screenshotName)
 
@@ -55,9 +55,9 @@ if not os.path.exists(folder):
 # main loop
 periodTime = period * 60 # in seconds
 
-print("Taking iOS Simulator screenshots every: " + str(period) + " minutes.")
-print("Target directory: " + folder)
-print("Press Ctrl-C to break.\n")
+print "Taking iOS Simulator screenshots every: " + str(period) + " minutes."
+print "Target directory: " + folder
+print "Press Ctrl-C to break.\n"
 
 n = 0
 while True:

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 from AppKit import NSWorkspace
 from AppKit import NSRunningApplication
@@ -20,5 +20,5 @@ for app in launchedApps:
 for app in appsToTerminate:
 	app.terminate()
 	
-print '%d apps terminated! Have a nice day!' % len(appsToTerminate)
+print('%d apps terminated! Have a nice day!' % len(appsToTerminate))
 	

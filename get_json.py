@@ -1,13 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # 
 # JSON pretty printer, you can pass URL, string or file
 # and it will output nicely printed json
 
-import json, sys, urllib2
+import json, sys, urllib.request, urllib.error, urllib.parse
 
 # JSON data providers
 def jsonFromURL(url):
-	response = urllib2.urlopen(url)
+	response = urllib.request.urlopen(url)
 	html = response.read()
 	if html != None:
 		return json.loads(html)
@@ -25,11 +25,11 @@ def jsonFromString(string):
 
 # Help & Error
 def error(msg):
-	print 'Error: %s' % msg
+	print('Error: %s' % msg)
 	exit(1)
 
 def printHelpAndExit():
-	print 'Usage: %s --file/--url/--string <data>' % sys.argv[0]
+	print('Usage: %s --file/--url/--string <data>' % sys.argv[0])
 	exit()
 
 # Main
@@ -48,6 +48,6 @@ else:
 	printHelpAndExit()
 
 if data != None:
-	print json.dumps(data, indent=4, sort_keys=True, separators=(',', ': '))
+	print(json.dumps(data, indent=2, sort_keys=True, separators=(',', ': ')))
 else:
 	error('something wrong with getting JSON!')

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#/usr/bin/env python3
 
 # TODOs:
 # - add option to use "hdiutil" and .dmg format
