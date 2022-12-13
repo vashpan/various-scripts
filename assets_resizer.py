@@ -172,7 +172,7 @@ def handle_icon_cmd(args):
 
 		log_file_operation(outfile)
 		
-		outim = im.resize(size, Image.ANTIALIAS)
+		outim = im.resize(size, Image.Resampling.LANCZOS)
 		outim.save(outfile, "PNG")
 
 	watchos_out_dir = os.path.join(outdir, "watchOS")
@@ -183,7 +183,7 @@ def handle_icon_cmd(args):
 
 		log_file_operation(outfile)
 		
-		outim = im.resize(size, Image.ANTIALIAS)
+		outim = im.resize(size, Image.Resampling.LANCZOS)
 		outim.save(outfile, "PNG")
 
 	imessage_out_dir = os.path.join(outdir, "iMessage")
@@ -203,7 +203,7 @@ def handle_icon_cmd(args):
 		)
 
 		tempim = im.crop(target_box)		
-		outim = tempim.resize(size, Image.ANTIALIAS)
+		outim = tempim.resize(size, Image.Resampling.LANCZOS)
 		outim.save(outfile, "PNG")
 #
 
@@ -231,7 +231,7 @@ def handle_image_cmd(args):
 
 		size = (int(math.ceil(im.size[0] * scale)), int(math.ceil(im.size[1] * scale)))
 		log_file_operation(outfile)
-		outim = im.resize(size, Image.ANTIALIAS)
+		outim = im.resize(size, Image.Resampling.LANCZOS)
 		outim.save(outfile, "PNG")
 #
 
