@@ -160,9 +160,9 @@ def handle_icon_cmd(args):
 		error("invalid size of source icon! Valid size: %dx%d" % (valid_source_icon_size[0], valid_source_icon_size[1]) )
 
 	# check if image is not transparent & doesn't have alpha channel
-	has_alpha = im.mode == 'RGBA'
-	if has_alpha == True:
-		error("source icon can't have alpha channel!")
+	format_valid = im.mode == 'RGB'
+	if format_valid == False:
+		error("source icon must be in RGB format! Maybe it has an alpha channel? Source icon format: %s" % (im.mode))
 
 	ios_out_dir = os.path.join(outdir, "iOS")
 	make_sure_dir_exists(ios_out_dir)
