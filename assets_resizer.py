@@ -20,6 +20,8 @@
 # Enjoy! 
 #
 
+# todo: add a generic "resize" command that could be helpful in batch-resizing various images
+
 import os, os.path, sys, math
 
 try:
@@ -34,11 +36,9 @@ from PIL import Image
 valid_source_icon_size = (1024,1024)
 
 image_postfixes = {
-	'' : 0.25,
-	'@2x' : 0.5,
-	'@3x' : 0.75,
-	'@2x~ipad' : 1.0,
-	'~ipad' : 0.5
+	''    : 0.333,
+	'@2x' : 0.666,
+	'@3x' : 1.000,
 }
 
 ios_icon_sizes = [
