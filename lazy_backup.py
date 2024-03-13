@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # TODOs:
+# - add threads limiter optional
 # - add option to use "hdiutil" and .dmg format
 # - try to not compress uncompressable data, tips here: https://sourceforge.net/p/p7zip/discussion/383044/thread/e3c9db96/ 
 
@@ -16,10 +17,10 @@ def print_usage_and_exit(msg = None):
     exit(1)
 
 def backup_7z(use_compression, password, source, destination):
-    launch_args = ["7z", "a", "-p%s" % password, "-mhe=on", '"' + destination + '"', '"' + source + '"']
+    launch_args = ["7z", "a", "-p%s" % password, "-mhe=on", "-mmt=4", '"' + destination + '"', '"' + source + '"']
     if not use_compression:
         launch_args.insert(4, "-m0=Copy")
-
+        
     launch_cmd = " ".join(launch_args)
 
     cmd_result = os.system(launch_cmd)
