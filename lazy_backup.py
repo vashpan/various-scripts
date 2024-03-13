@@ -66,9 +66,4 @@ if password != getpass("Retype password: "):
 print()
 print("Archiving: %s -> %s ..." % (source, destination))
 
-# print(source)
-# print(destination)
-# print(use_compression)
-# print(password)
-
 backup_7z(use_compression, password, source, destination)
