@@ -27,6 +27,7 @@ def get_system_info():
         'CPU Clock (MHz)': cpu_freq,
         'RAM (GB)': round(ram_gb, 2)
     }
+
     return system_info
 
 def get_os_info():
@@ -39,10 +40,15 @@ def get_os_info():
     boot_time = datetime.fromtimestamp(boot_time_timestamp)
     uptime = datetime.now() - boot_time
 
+    # Get current date/time of script run
+    date_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     os_info = {
+        'Date': date_string,
         'System': os_name,
         'Uptime': str(uptime).split('.')[0]  # Remove microseconds
     }
+
     return os_info
 
 def get_system_stats():
