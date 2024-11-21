@@ -1,1 +1,4 @@
 .DS_Store
+
+# output of macos_stats.py script
+process_info.*
