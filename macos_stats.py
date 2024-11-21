@@ -99,7 +99,9 @@ def get_process_info():
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             continue
     
-    return process_list
+    sorted_process_list = sorted(process_list, key=lambda x: x['Name'])
+
+    return sorted_process_list
 
 def save_to_files(process_list, system_info, os_info, stats):
     # Save to text file
